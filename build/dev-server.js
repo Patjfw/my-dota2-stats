@@ -11,6 +11,7 @@ var express = require('express')
 var webpack = require('webpack')
 var proxyMiddleware = require('http-proxy-middleware')
 var webpackConfig = require('./webpack.dev.conf')
+var apiRequest = require('../server/apiRequest.js')
 
 // default port where dev server listens for incoming traffic
 var port = process.env.PORT || config.dev.port
@@ -81,6 +82,8 @@ devMiddleware.waitUntilValid(() => {
 })
 
 var server = app.listen(port)
+
+apiRequest.request(app);
 
 module.exports = {
   ready: readyPromise,
