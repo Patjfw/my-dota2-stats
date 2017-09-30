@@ -28,13 +28,12 @@ export default {
     request: function () {
       axios.get('/get_match_history', {
       }).then((res) => {
-        console.log(res.data.result.matches[0].players[7].hero_id)
         this.heroes.push(res.data.result.matches[0].players[7].hero_id)
       })
     },
     getHeroImg: function (heroId) {
-      console.log(this.imageCache)
-      return this.imageCache.result.heroes[heroId - 1].imgURL + '_sb.png'
+      // the result returned is unsorted, and missing some index, so can't use index directly
+      return this.imageCache.result.heroes.find(function (item) { return item.id === heroId }).imgURL + '_sb.png'
     }
   }
 }

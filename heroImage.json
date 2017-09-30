@@ -56,16 +56,16 @@
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/mirana"
       },
       {
-        "name": "npc_dota_hero_nevermore",
-        "id": 11,
-        "localized_name": "影魔",
-        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/nevermore"
-      },
-      {
         "name": "npc_dota_hero_morphling",
         "id": 10,
         "localized_name": "变体精灵",
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/morphling"
+      },
+      {
+        "name": "npc_dota_hero_nevermore",
+        "id": 11,
+        "localized_name": "影魔",
+        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/nevermore"
       },
       {
         "name": "npc_dota_hero_phantom_lancer",
@@ -146,12 +146,6 @@
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/lina"
       },
       {
-        "name": "npc_dota_hero_lich",
-        "id": 31,
-        "localized_name": "巫妖",
-        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/lich"
-      },
-      {
         "name": "npc_dota_hero_lion",
         "id": 26,
         "localized_name": "莱恩",
@@ -180,6 +174,12 @@
         "id": 30,
         "localized_name": "巫医",
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/witch_doctor"
+      },
+      {
+        "name": "npc_dota_hero_lich",
+        "id": 31,
+        "localized_name": "巫妖",
+        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/lich"
       },
       {
         "name": "npc_dota_hero_riki",
@@ -398,16 +398,16 @@
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/spectre"
       },
       {
-        "name": "npc_dota_hero_doom_bringer",
-        "id": 69,
-        "localized_name": "末日使者",
-        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/doom_bringer"
-      },
-      {
         "name": "npc_dota_hero_ancient_apparition",
         "id": 68,
         "localized_name": "远古冰魄",
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/ancient_apparition"
+      },
+      {
+        "name": "npc_dota_hero_doom_bringer",
+        "id": 69,
+        "localized_name": "末日使者",
+        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/doom_bringer"
       },
       {
         "name": "npc_dota_hero_ursa",
@@ -620,6 +620,12 @@
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/legion_commander"
       },
       {
+        "name": "npc_dota_hero_techies",
+        "id": 105,
+        "localized_name": "工程师",
+        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/techies"
+      },
+      {
         "name": "npc_dota_hero_ember_spirit",
         "id": 106,
         "localized_name": "灰烬之灵",
@@ -630,6 +636,12 @@
         "id": 107,
         "localized_name": "大地之灵",
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/earth_spirit"
+      },
+      {
+        "name": "npc_dota_hero_abyssal_underlord",
+        "id": 108,
+        "localized_name": "孽主",
+        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/abyssal_underlord"
       },
       {
         "name": "npc_dota_hero_terrorblade",
@@ -650,12 +662,6 @@
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/oracle"
       },
       {
-        "name": "npc_dota_hero_techies",
-        "id": 105,
-        "localized_name": "工程师",
-        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/techies"
-      },
-      {
         "name": "npc_dota_hero_winter_wyvern",
         "id": 112,
         "localized_name": "寒冬飞龙",
@@ -666,12 +672,6 @@
         "id": 113,
         "localized_name": "天穹守望者",
         "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/arc_warden"
-      },
-      {
-        "name": "npc_dota_hero_abyssal_underlord",
-        "id": 108,
-        "localized_name": "孽主",
-        "imgURL": "http://cdn.dota2.com/apps/dota2/images/heroes/abyssal_underlord"
       },
       {
         "name": "npc_dota_hero_monkey_king",

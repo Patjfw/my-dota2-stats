@@ -33,7 +33,7 @@ exports.checkCache = function () {
         }
         let data = JSON.stringify(res, null, 2);
         fs.writeFileSync('heroImage.json', data);
-        
+
         return data
       })
       .catch(function(err){
