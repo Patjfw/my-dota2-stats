@@ -8,7 +8,12 @@ exports.request = function (expressApp) {
   const LANG = 'zh_cn'
   const STEAM_MATCH_HISTORY_API_URL = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001'
 
-  let images = imageCache.checkCache()
+  let images;
+  let imagesPromise = imageCache.checkCache()
+
+  imagesPromise.then(function(vals){
+    images = vals;
+  })
 
   function assembleQueryObj(reqType='GET', url, params, useJSON=true){
     let query = Object.assign({
