@@ -4,10 +4,15 @@
     <div v-for='hero_id in heroes'>
       <img :src='getHeroImg(hero_id)'>
     </div>
+    <img src='http://cdn.dota2.com/apps/dota2/images/abilities/zuus_arc_lightning_lg.png' />
   </div>
 </template>
 
 <script>
+// sb.png: 59x33px small horizontal portrait
+// lg.png: 205x105px large horizontal portrait
+// full.png: 256x144px full-quality horizontal portrait
+// vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
 import axios from 'axios'
 
 export default {
