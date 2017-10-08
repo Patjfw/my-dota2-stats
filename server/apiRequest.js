@@ -7,6 +7,7 @@ exports.request = function (expressApp) {
   const ACCOUNT_ID = '86782354'
   const LANG = 'zh_cn'
   const STEAM_MATCH_HISTORY_API_URL = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchHistory/V001'
+  const STEAM_MATCH_DETAIL_API_URL = 'https://api.steampowered.com/IDOTA2Match_570/GetMatchDetails/V001'
 
   let images;
   let imagesPromise = imageCache.checkCache()
@@ -36,6 +37,11 @@ exports.request = function (expressApp) {
 
   expressApp.get('/get_match_history', (req, res) => {
     let requestObj = assembleQueryObj('GET', STEAM_MATCH_HISTORY_API_URL, req.query)
+    request(requestObj).pipe(res);
+  })
+
+  expressApp.get('/get_match_detail', (req, res) => {
+    let requestObj = assembleQueryObj('GET', STEAM_MATCH_DETAIL_API_URL, req.query)
     request(requestObj).pipe(res);
   })
 }
