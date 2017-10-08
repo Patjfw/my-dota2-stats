@@ -4,7 +4,9 @@
       <img :src='getMyHeroImg(match)'>
       <span>{{getMyHeroName(match)}}</span>
       <span>{{match.match_id}}</span>
-      <!-- <span>{{match.details.radiant_win}}</span> -->
+      <span v-if='detailsFlag'>{{getWin(match)}}</span>
+      <span v-if='detailsFlag'>{{getKDA(match)}}</span>
+      <!-- <span>{{getSkillLevel(match)}}</span> -->
     </div>
     <!-- <img src='http://cdn.dota2.com/apps/dota2/images/abilities/zuus_arc_lightning_lg.png' /> -->
   </div>
@@ -16,6 +18,7 @@
 // full.png: 256x144px full-quality horizontal portrait
 // vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
 import axios from 'axios'
+import Vue from 'vue'
 
 const RecentGamesCount = 10
 
@@ -26,6 +29,7 @@ export default {
   },
   data () {
     return {
+      detailsFlag: false,
       heroesImageCache: null,
       itemsImageCache: null,
       matches: []
@@ -79,9 +83,10 @@ export default {
       let allMatchesPromise = Promise.all(matchesPromiseArr)
       allMatchesPromise.then((val) => {
         for (let i = 0; i < this.matches.length; i++) {
-          this.matches[i].details = val[i]
+          // be careful! Remember the declartive property of Vue
+          Vue.set(this.matches[i], 'details', val[i])
         }
-        console.log(this.matches)
+        this.detailsFlag = true
       })
     },
     getMyHeroID (match) {
@@ -107,6 +112,26 @@ export default {
     getMyHeroName (match) {
       let myHeroID = this.getMyHeroID(match)
       return this.getHeroName(myHeroID)
+    },
+    getWin (match) {
+      let myHeroID = this.getMyHeroID(match)
+      let myPerformance = match.details.players.find(function (item) {
+        return item.hero_id === myHeroID
+      })
+      // see player_slot field explanation
+      if ((myPerformance.player_slot < 128 && match.details.radiant_win) ||
+          (myPerformance.player_slot >= 128 && !match.details.radiant_win)) {
+        return 'Win'
+      } else {
+        return 'Lose'
+      }
+    },
+    getKDA (match) {
+      let myHeroID = this.getMyHeroID(match)
+      let myPerformance = match.details.players.find(function (item) {
+        return item.hero_id === myHeroID
+      })
+      return `${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists}`
     }
   }
 }
