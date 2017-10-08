@@ -15,3 +15,7 @@ selenium-debug.log
 *.njsproj
 *.sln
 *.7z
+
+# cache file
+heroesImage.json
+itemsImage.json
