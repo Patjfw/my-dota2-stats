@@ -1,14 +1,23 @@
 <template>
-  <div class="hello">
-    <div v-for='match in matches'>
-      <img :src='getMyHeroImg(match)'>
-      <span>{{getMyHeroName(match)}}</span>
-      <span>{{match.match_id}}</span>
-      <span v-if='detailsFlag'>{{getWin(match)}}</span>
-      <span v-if='detailsFlag'>{{getKDA(match)}}</span>
-      <!-- <span>{{getSkillLevel(match)}}</span> -->
+  <div id='recent_games_list'>
+    <div id="sub_title">最近比赛</div>
+    <div id='list_body'>
+      <div class='tr' id="th_title">
+        <div class='col_hero'>英雄</div>
+        <div class='col_match_id'>比赛ID</div>
+        <div class='col_win'>结果</div>
+        <div class='col_kda'>KDA(K/D/A)</div>
+      </div>
+      <div class='tr' v-if='detailsFlag' v-for='match in matches'>
+        <div class='col_hero'>
+          <img :src='getMyHeroImg(match)'>
+          <span class='hero_name'>{{getMyHeroName(match)}}</span>
+        </div>
+        <div class='col_match_id'>{{match.match_id}}</div>
+        <div class='col_win' :class='getWin(match)'>{{getWin(match)}}</div>
+        <div class='col_kda'>{{getKDA(match)}}</div>
+      </div>
     </div>
-    <!-- <img src='http://cdn.dota2.com/apps/dota2/images/abilities/zuus_arc_lightning_lg.png' /> -->
   </div>
 </template>
 
@@ -121,9 +130,9 @@ export default {
       // see player_slot field explanation
       if ((myPerformance.player_slot < 128 && match.details.radiant_win) ||
           (myPerformance.player_slot >= 128 && !match.details.radiant_win)) {
-        return 'Win'
+        return 'win'
       } else {
-        return 'Lose'
+        return 'lose'
       }
     },
     getKDA (match) {
@@ -131,12 +140,98 @@ export default {
       let myPerformance = match.details.players.find(function (item) {
         return item.hero_id === myHeroID
       })
-      return `${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists}`
+      let kda = ((myPerformance.kills + myPerformance.assists) / (myPerformance.deaths === 0 ? 1 : myPerformance.deaths)).toFixed(1)
+      return `${kda} (${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists})`
     }
   }
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
-<style>
+<style lang='sass' scoped>
+  @media (min-width: 800px)
+    #recent_games_list
+      width: 800px
+      margin: 0 auto
+      color: #fff
+      font-size: 12px
+
+    #list_body
+      box-shadow: 0 0 1px 1px #000
+
+    #sub_title
+      color: #000
+
+    #th_title
+      font-weight: bold
+
+    .tr:nth-child(odd)
+      background: #212121
+
+    .tr:nth-child(even)
+      background: #1a1a1a
+
+    .col_hero
+      display: flex
+      align-items: center
+      flex-basis: 150px
+
+    .col_match_id
+
+    .col_win
+      flex-basis: 50px
+
+    .col_kda
+      flex-basis: 150px
+
+
+
+  @media (max-width: 799px)
+    #recent_games_list
+      width: 100%
+      font-size: 12px
+
+    #th_title
+      display: none
+
+    .col_hero
+      display: flex
+      flex-basis: 150px
+      align-items: center
+
+
+    .col_match_id
+      display: none
+
+    .col_win
+      flex-basis: 50px
+
+    .col_kda
+      display: flex
+      justify-content: flex-end
+      flex-basis: 150px
+
+
+  #sub_title
+    margin: 0 0 5px 20px
+    font-size: 16px
+    font-weight: bold
+
+  .tr
+    display: flex
+    align-items: center
+    justify-content: space-between
+    padding: 5px
+
+  .hero_name
+    margin-left: 5px
+
+  .win
+    color: #499249
+
+  .lose
+    color: #c23c2a
+
+
+
 </style>
