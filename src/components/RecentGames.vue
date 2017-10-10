@@ -8,15 +8,18 @@
         <div class='col_win'>结果</div>
         <div class='col_kda'>KDA(K/D/A)</div>
       </div>
-      <div class='tr' v-if='detailsFlag' v-for='match in matches'>
-        <div class='col_hero'>
-          <img :src='getMyHeroImg(match)'>
-          <span class='hero_name'>{{getMyHeroName(match)}}</span>
+      <transition-group name='fade'>
+        <div class='tr' v-if='detailsFlag' v-for='(match, index) in matches' :key='match.match_id' @click='showBriefing(index)'>
+          <div class='col_hero'>
+            <img :src='getMyHeroImg(match)'>
+            <span class='hero_name'>{{getMyHeroName(match)}}</span>
+          </div>
+          <div class='col_match_id'>{{match.match_id}}</div>
+          <div class='col_win' :class='getWin(match)'>{{getWin(match)}}</div>
+          <div class='col_kda'>{{getKDA(match)}}</div>
+          <briefing-panel v-if='match.showBriefing' :itemsImageCache='itemsImageCache' :account_id='account_id' :matchDetails='match.details'></briefing-panel>
         </div>
-        <div class='col_match_id'>{{match.match_id}}</div>
-        <div class='col_win' :class='getWin(match)'>{{getWin(match)}}</div>
-        <div class='col_kda'>{{getKDA(match)}}</div>
-      </div>
+      </transition-group>
     </div>
   </div>
 </template>
@@ -28,13 +31,15 @@
 // vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
 import axios from 'axios'
 import Vue from 'vue'
+import BriefingPanel from './BriefingPanel'
 
 const RecentGamesCount = 10
 
 export default {
   name: 'RecentGames',
   props: {
-    account_id: Number
+    account_id: Number,
+    hasBriefing: Boolean
   },
   data () {
     return {
@@ -94,6 +99,7 @@ export default {
         for (let i = 0; i < this.matches.length; i++) {
           // be careful! Remember the declartive property of Vue
           Vue.set(this.matches[i], 'details', val[i])
+          Vue.set(this.matches[i], 'showBriefing', false)
         }
         this.detailsFlag = true
       })
@@ -142,7 +148,13 @@ export default {
       })
       let kda = ((myPerformance.kills + myPerformance.assists) / (myPerformance.deaths === 0 ? 1 : myPerformance.deaths)).toFixed(1)
       return `${kda} (${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists})`
+    },
+    showBriefing (index) {
+      this.matches[index].showBriefing = !this.matches[index].showBriefing
     }
+  },
+  components: {
+    BriefingPanel
   }
 }
 </script>
@@ -151,7 +163,7 @@ export default {
 <style lang='sass' scoped>
   @media (min-width: 800px)
     #recent_games_list
-      width: 800px
+      width: 600px
       margin: 0 auto
       color: #fff
       font-size: 12px
@@ -177,6 +189,7 @@ export default {
       flex-basis: 150px
 
     .col_match_id
+      flex-basis: 150px
 
     .col_win
       flex-basis: 50px
@@ -194,11 +207,13 @@ export default {
     #th_title
       display: none
 
+    .tr
+      border-top: 1px solid #ccc
+
     .col_hero
       display: flex
       flex-basis: 150px
       align-items: center
-
 
     .col_match_id
       display: none
@@ -219,6 +234,7 @@ export default {
 
   .tr
     display: flex
+    flex-wrap: wrap
     align-items: center
     justify-content: space-between
     padding: 5px
@@ -232,6 +248,12 @@ export default {
   .lose
     color: #c23c2a
 
+  .fade-enter-active, .fade-leave-active
+    transition: all 0.2s
+
+  .fade-enter, .fade-leave-to
+    transform: translateY(30px)
+    opacity: 0
 
 
 </style>

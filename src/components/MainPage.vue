@@ -1,5 +1,5 @@
 <template lang="html">
-  <recent-games :account_id=account_id></recent-games>
+  <recent-games :account_id=account_id :hasBriefing=hasBriefing></recent-games>
 </template>
 
 <script>
@@ -10,7 +10,8 @@ const ACCOUNT_ID = 86782354
 export default {
   data () {
     return {
-      account_id: ACCOUNT_ID
+      account_id: ACCOUNT_ID,
+      hasBriefing: true
     }
   },
   components: {
