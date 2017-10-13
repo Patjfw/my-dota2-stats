@@ -8,7 +8,7 @@
         <div class='col_win'>结果</div>
         <div class='col_kda'>KDA(K/D/A)</div>
       </div>
-      <transition-group name='fade'>
+      <transition-group name='fade' tag='div'>
         <div class='tr' v-if='detailsFlag' v-for='(match, index) in matches' :key='match.match_id' @click='showBriefing(index)'>
           <div class='col_hero'>
             <img :src='getMyHeroImg(match)'>
@@ -17,7 +17,9 @@
           <div class='col_match_id'>{{match.match_id}}</div>
           <div class='col_win' :class='getWin(match)'>{{getWin(match)}}</div>
           <div class='col_kda'>{{getKDA(match)}}</div>
-          <briefing-panel v-if='match.showBriefing' :itemsImageCache='itemsImageCache' :account_id='account_id' :matchDetails='match.details'></briefing-panel>
+          <transition name='fade' tag='div' mode='out-in'>
+            <briefing-panel v-if='match.showBriefing' :itemsImageCache='itemsImageCache' :account_id='account_id' :matchDetails='match.details'></briefing-panel>
+          </transition>
         </div>
       </transition-group>
     </div>
@@ -31,12 +33,14 @@
 // vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
 import axios from 'axios'
 import Vue from 'vue'
+import { fetch } from './mixins/fetch'
 import BriefingPanel from './BriefingPanel'
 
 const RecentGamesCount = 10
 
 export default {
   name: 'RecentGames',
+  mixins: [fetch],
   props: {
     account_id: Number,
     hasBriefing: Boolean
@@ -104,35 +108,17 @@ export default {
         this.detailsFlag = true
       })
     },
-    getMyHeroID (match) {
-      return match.players.find((item) => {
-        return item.account_id === this.account_id
-      }).hero_id
-    },
-    getHeroImg (heroID) {
-      // the result returned is unsorted, and missing some index, so can't use index directly
-      return this.heroesImageCache.result.heroes.find(function (item) {
-        return item.id === heroID
-      }).imgURL + '_sb.png'
-    },
     getMyHeroImg (match) {
-      let myHeroID = this.getMyHeroID(match)
+      let myHeroID = this.getHeroID(match, this.account_id)
       return this.getHeroImg(myHeroID)
     },
-    getHeroName (heroID) {
-      return this.heroesImageCache.result.heroes.find(function (item) {
-        return item.id === heroID
-      }).localized_name
-    },
     getMyHeroName (match) {
-      let myHeroID = this.getMyHeroID(match)
+      let myHeroID = this.getHeroID(match, this.account_id)
       return this.getHeroName(myHeroID)
     },
     getWin (match) {
-      let myHeroID = this.getMyHeroID(match)
-      let myPerformance = match.details.players.find(function (item) {
-        return item.hero_id === myHeroID
-      })
+      let myHeroID = this.getHeroID(match, this.account_id)
+      let myPerformance = this.getPerformance(match, myHeroID)
       // see player_slot field explanation
       if ((myPerformance.player_slot < 128 && match.details.radiant_win) ||
           (myPerformance.player_slot >= 128 && !match.details.radiant_win)) {
@@ -142,10 +128,8 @@ export default {
       }
     },
     getKDA (match) {
-      let myHeroID = this.getMyHeroID(match)
-      let myPerformance = match.details.players.find(function (item) {
-        return item.hero_id === myHeroID
-      })
+      let myHeroID = this.getHeroID(match, this.account_id)
+      let myPerformance = this.getPerformance(match, myHeroID)
       let kda = ((myPerformance.kills + myPerformance.assists) / (myPerformance.deaths === 0 ? 1 : myPerformance.deaths)).toFixed(1)
       return `${kda} (${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists})`
     },
@@ -197,8 +181,6 @@ export default {
     .col_kda
       flex-basis: 150px
 
-
-
   @media (max-width: 799px)
     #recent_games_list
       width: 100%
@@ -224,11 +206,10 @@ export default {
     .col_kda
       display: flex
       justify-content: flex-end
-      flex-basis: 150px
-
+      flex: 1 0 0
 
   #sub_title
-    margin: 0 0 5px 20px
+    margin: 5px 0 5px 20px
     font-size: 16px
     font-weight: bold
 
@@ -252,8 +233,6 @@ export default {
     transition: all 0.2s
 
   .fade-enter, .fade-leave-to
-    transform: translateY(30px)
+    transform: translateX(30px)
     opacity: 0
-
-
 </style>

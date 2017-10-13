@@ -1,5 +1,5 @@
 <template lang="html">
-  <recent-games :account_id=account_id :hasBriefing=hasBriefing></recent-games>
+  <recent-games :account_id='account_id' :hasBriefing='hasBriefing'></recent-games>
 </template>
 
 <script>

@@ -1,19 +1,27 @@
 <template>
-  <div class='briefing_panel'>
-    <div class='eco'>
-      <div class='gpm'></div>
-      <div class='xpm'></div>
+  <div class="briefing_container">
+    <div class='briefing_panel'>
+      <div class='eco'>
+        <div class='gold_income'>总经济：{{getStat(stats, 'gold')}}</div>
+        <div class='gpm'>每分钟金钱：{{getStat(stats, 'gold_per_min')}}</div>
+        <div class='xpm'>每分钟经验：{{getStat(stats, 'xp_per_min')}}</div>
+        <div class='last_hits'>正补：{{getStat(stats, 'last_hits')}}</div>
+        <div class='denies'>反补：{{getStat(stats, 'denies')}}</div>
+      </div>
+      <div class='damage'>
+        <div class="hero_damage">英雄伤害：{{getStat(stats, 'hero_damage')}}</div>
+        <div class='build_damage'>建筑伤害：{{getStat(stats, 'tower_damage')}}</div>
+        <div class='heal'>英雄治疗：{{getStat(stats, 'hero_healing')}}</div>
+      </div>
+      <ul class='items'>
+        <li class='item_li' v-for='item in getItems(stats)'>
+          <img class='item_img' :src='item.imgSrc' :title='item.localized_name'/>
+        </li>
+      </ul>
     </div>
-    <div class='damage'>
-      <div class="hero_damage"></div>
-      <div class='build_damage'></div>
-      <div class='heal'></div>
+    <div class="details_link">
+      <a href='#/gameDetails'>查看比赛详情 >></a>
     </div>
-    <ul class='items'>
-      <li v-for='item in getItems(stats)'>
-        <img class='item_img' :src='item.imgSrc' />
-      </li>
-    </ul>
   </div>
 </template>
 
@@ -54,28 +62,76 @@
           }
         }
         return items
+      },
+      getStat (stats, propertyName) {
+        switch (propertyName) {
+          case 'gold':
+            return stats['gold'] + stats['gold_spent']
+          default:
+            return stats[propertyName]
+        }
       }
     }
   }
 </script>
 
 <style lang='sass' scoped>
-  .briefing_panel
-    width: 100%
-    display: flex
+  @media (max-width: 360px)
+    .briefing_panel
+      width: 100%
+      margin-top: 10px
+      display: flex
+      justify-content: center
+      flex-wrap: wrap
 
     .eco
+      flex: 0 1 150px
 
     .damage
+      flex: 0 1 150px
 
     .items
-      align-items: flex-end
-      display: flex
-      flex-grow: none
-      flex-basis: 200px
+      flex: 0 0 auto
+
+    .item_li
+      display: inline
 
     .item_img
+      margin: 2px
+      width: 36px
+      height: 27px
+
+  @media (min-width: 361px)
+    .eco
+      flex: 1 0 100px
+
+    .damage
+      flex: 2 0 100px
+
+    .items
+      flex: 0 0 160px
+
+    .item_li
+      display: inline
+
+    .item_img
+      margin: 2px
       width: 48px
       height: 36px
+
+  .briefing_container
+    width: 100%
+
+  .briefing_panel
+    width: 100%
+    margin-top: 10px
+    display: flex
+    wrap: wrap
+
+
+
+  .details_link
+    float: right
+
 
 </style>
