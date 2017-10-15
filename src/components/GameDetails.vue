@@ -1,13 +1,20 @@
 <template lang="html">
   <div>
-    123
+    <div class="">
+      比赛{{$route.params.match_id}}
+    </div>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'GameDetails'
-}
+  import { detailsFetch } from './mixins/detailsFetch'
+
+  export default {
+    name: 'GameDetails',
+    mixins: [detailsFetch],
+    methods: {
+    }
+  }
 </script>
 
 <style lang="sass">

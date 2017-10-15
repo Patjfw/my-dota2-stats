@@ -54,15 +54,24 @@ export default {
     }
   },
   mounted () {
-    let extraSourceLoadPromise = Promise.all([this.getImgCache(), this.getRecentMatches()])
-    extraSourceLoadPromise.then(val => {
-      this.heroesImageCache = val[0].heroesImageCache
-      this.itemsImageCache = val[0].itemsImageCache
-      this.matches = val[1]
+    if (this.$store.state.matches.length) {
+      this.matches.push(...this.$store.state.matches)
+      this.heroesImageCache = this.$store.state.heroesImageCache
+      this.itemsImageCache = this.$store.state.itemsImageCache
+      this.detailsFlag = true
+    } else {
+      let extraSourceLoadPromise = Promise.all([this.getImgCache(), this.getRecentMatches()])
+      extraSourceLoadPromise.then(val => {
+        this.heroesImageCache = val[0].heroesImageCache
+        this.itemsImageCache = val[0].itemsImageCache
+        this.matches = val[1]
 
-      // this.showRecentMatchesList(this.matches)
-      this.getMatchDetails()
-    })
+        // this.showRecentMatchesList(this.matches)
+        this.$store.commit('setHeroesImageCache', this.heroesImageCache)
+        this.$store.commit('setItemsImageCache', this.itemsImageCache)
+        this.getMatchDetails()
+      })
+    }
   },
   methods: {
     getImgCache () {
@@ -106,6 +115,7 @@ export default {
           Vue.set(this.matches[i], 'showBriefing', false)
         }
         this.detailsFlag = true
+        this.$store.commit('setMatches', this.matches)
       })
     },
     getMyHeroImg (match) {

@@ -10,9 +10,11 @@
 </template>
 
 <script>
-export default {
-  name: 'app'
-}
+  import store from './store'
+  export default {
+    name: 'app',
+    store
+  }
 </script>
 
 <style lang='sass'>
@@ -23,7 +25,7 @@ export default {
   a
     text-decoration: none
 
-    &:hover
+    &:hover, &:link, &:visited
       color: red
 
   ul

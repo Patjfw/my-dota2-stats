@@ -20,57 +20,28 @@
       </ul>
     </div>
     <div class="details_link">
-      <a href='#/gameDetails'>查看比赛详情 >></a>
+      <router-link to="/gameDetails/:matchDetails.match_id">查看比赛详情 >></router-link>
     </div>
   </div>
 </template>
 
 <script>
+  import { detailsFetch } from './mixins/detailsFetch'
+
   export default {
     name: 'BriefingPanel',
     props: {
       account_id: Number,
-      itemsImageCache: Object,
       matchDetails: Object
     },
+    mixins: [detailsFetch],
     data () {
       return {
         stats: null
       }
     },
     created () {
-      this.stats = this.getMyStats(this.matchDetails)
-    },
-    methods: {
-      getMyStats (matchDetails) {
-        return matchDetails.players.find((item) => {
-          return item.account_id === this.account_id
-        })
-      },
-      getItems (stats) {
-        let items = []
-        for (let i = 0; i < 6; i++) {
-          let itemID = stats['item_' + i]
-          let item = this.itemsImageCache.result.items.find(function (item) {
-            return itemID === item.id
-          })
-
-          // it's possible that not full slots
-          if (item) {
-            items.push(item)
-            item.imgSrc = 'http://cdn.dota2.com/apps/dota2/images/items/' + item.name.substring(5) + '_lg.png'
-          }
-        }
-        return items
-      },
-      getStat (stats, propertyName) {
-        switch (propertyName) {
-          case 'gold':
-            return stats['gold'] + stats['gold_spent']
-          default:
-            return stats[propertyName]
-        }
-      }
+      this.stats = this.getStats(this.matchDetails, this.account_id)
     }
   }
 </script>
@@ -127,7 +98,6 @@
     margin-top: 10px
     display: flex
     wrap: wrap
-
 
 
   .details_link

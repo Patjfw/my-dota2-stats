@@ -1,6 +1,4 @@
 export const fetch = {
-  data () {
-  },
   methods: {
     getHeroID (match, accountID) {
       return match.players.find((item) => {
@@ -8,13 +6,13 @@ export const fetch = {
       }).hero_id
     },
     getHeroName (heroID) {
-      return this.heroesImageCache.result.heroes.find(function (item) {
+      return this.$store.state.heroesImageCache.result.heroes.find(function (item) {
         return item.id === heroID
       }).localized_name
     },
     getHeroImg (heroID) {
       // the result returned is unsorted, and missing some index, so can't use index directly
-      return this.heroesImageCache.result.heroes.find(function (item) {
+      return this.$store.state.heroesImageCache.result.heroes.find(function (item) {
         return item.id === heroID
       }).imgURL + '_sb.png'
     },
