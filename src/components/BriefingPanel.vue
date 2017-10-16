@@ -20,7 +20,7 @@
       </ul>
     </div>
     <div class="details_link">
-      <router-link to="/gameDetails/:matchDetails.match_id">查看比赛详情 >></router-link>
+      <router-link :to="'/gameDetails/' + matchDetails.match_id">查看比赛详情 >></router-link>
     </div>
   </div>
 </template>

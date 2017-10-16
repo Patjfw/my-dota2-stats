@@ -3,8 +3,8 @@
     <router-view></router-view>
     <div id="declartion">
       <p>说明：</p>
-      <p>功能类似于DotaMax，显示最近十场比赛的统计数据。</p>
-      <p>数据来源于Steam API，如果载入失败，那一定是V社服务器又抽风了</p>
+      <p>功能类似于DotaMax，显示最近十场比赛的统计数据。试试用手机访问哦 :)</p>
+      <p>数据来源于Steam API，如果载入失败，那一定是V社服务器又抽风了 :(</p>
     </div>
   </div>
 </template>

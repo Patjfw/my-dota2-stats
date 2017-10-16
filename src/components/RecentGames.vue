@@ -16,7 +16,7 @@
           </div>
           <div class='col_match_id'>{{match.match_id}}</div>
           <div class='col_win' :class='getWin(match)'>{{getWin(match)}}</div>
-          <div class='col_kda'>{{getKDA(match)}}</div>
+          <div class='col_kda'>{{getMyKDA(match)}}</div>
           <transition name='fade' tag='div' mode='out-in'>
             <briefing-panel v-if='match.showBriefing' :itemsImageCache='itemsImageCache' :account_id='account_id' :matchDetails='match.details'></briefing-panel>
           </transition>
@@ -31,12 +31,11 @@
 // lg.png: 205x105px large horizontal portrait
 // full.png: 256x144px full-quality horizontal portrait
 // vert.jpg: 235x272px full-quality vertical portrait (note that this is a .jpg)
-import axios from 'axios'
 import Vue from 'vue'
 import { fetch } from './mixins/fetch'
 import BriefingPanel from './BriefingPanel'
 
-const RecentGamesCount = 10
+const GAMES_COUNT = 10
 
 export default {
   name: 'RecentGames',
@@ -60,51 +59,31 @@ export default {
       this.itemsImageCache = this.$store.state.itemsImageCache
       this.detailsFlag = true
     } else {
-      let extraSourceLoadPromise = Promise.all([this.getImgCache(), this.getRecentMatches()])
-      extraSourceLoadPromise.then(val => {
-        this.heroesImageCache = val[0].heroesImageCache
-        this.itemsImageCache = val[0].itemsImageCache
-        this.matches = val[1]
+      if (this.$store.state.itemsImageCache) {
+        this.getRecentMatches(GAMES_COUNT).then(val => {
+          this.matches = val
+          this.getMatchesDetails()
+        })
+      } else {
+        let extraSourceLoadPromise = Promise.all([this.getImgCache(), this.getRecentMatches(GAMES_COUNT)])
+        extraSourceLoadPromise.then(val => {
+          this.heroesImageCache = val[0].heroesImageCache
+          this.itemsImageCache = val[0].itemsImageCache
+          this.matches = val[1]
 
-        // this.showRecentMatchesList(this.matches)
-        this.$store.commit('setHeroesImageCache', this.heroesImageCache)
-        this.$store.commit('setItemsImageCache', this.itemsImageCache)
-        this.getMatchDetails()
-      })
+          // this.showRecentMatchesList(this.matches)
+          this.$store.commit('setHeroesImageCache', this.heroesImageCache)
+          this.$store.commit('setItemsImageCache', this.itemsImageCache)
+          this.getMatchesDetails()
+        })
+      }
     }
   },
   methods: {
-    getImgCache () {
-      return new Promise(function (resolve, reject) {
-        axios.get('/get_image_cache', {
-        }).then((res) => {
-          resolve(res.data)
-        })
-      })
-    },
-    getRecentMatches () {
-      return new Promise(function (resolve, reject) {
-        axios.get('/get_match_history', {
-          params: {
-            matches_requested: RecentGamesCount
-          }
-        }).then((res) => {
-          resolve(res.data.result.matches)
-        })
-      })
-    },
-    getMatchDetails () {
+    getMatchesDetails () {
       let matchesPromiseArr = []
       for (let match of this.matches) {
-        matchesPromiseArr.push(new Promise(function (resolve, reject) {
-          axios.get('/get_match_detail', {
-            params: {
-              match_id: match.match_id
-            }
-          }).then((res) => {
-            resolve(res.data.result)
-          })
-        }))
+        matchesPromiseArr.push(this.getMatchDetails(match.match_id))
       }
 
       let allMatchesPromise = Promise.all(matchesPromiseArr)
@@ -137,11 +116,9 @@ export default {
         return 'lose'
       }
     },
-    getKDA (match) {
-      let myHeroID = this.getHeroID(match, this.account_id)
-      let myPerformance = this.getPerformance(match, myHeroID)
-      let kda = ((myPerformance.kills + myPerformance.assists) / (myPerformance.deaths === 0 ? 1 : myPerformance.deaths)).toFixed(1)
-      return `${kda} (${myPerformance.kills} / ${myPerformance.deaths} / ${myPerformance.assists})`
+    getMyKDA (match) {
+      let kda = this.getKDA(match)
+      return `${kda.kda} (${kda.kills} / ${kda.deaths} / ${kda.assists})`
     },
     showBriefing (index) {
       this.matches[index].showBriefing = !this.matches[index].showBriefing
