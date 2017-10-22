@@ -1,4 +1,5 @@
 var request = require('request');
+var bigdecimal = require("bigdecimal");
 var imageCache = require('./imageCache.js');
 
 exports.request = function (expressApp) {
@@ -31,9 +32,15 @@ exports.request = function (expressApp) {
     }
   }
 
-  // Convert Steam User ID(32) to Steam 64 ID
-  function steamIDConvertion(steamUserID){
-
+  // Convert Steam User ID(32) to Steam 64 ID, using node-int64
+  function steamIDConvertion(steamUserID, to64=true){
+    let base = new bigdecimal.BigInteger("76561197960265728")
+    let id = new bigdecimal.BigInteger(steamUserID)
+    if (to64) {
+      return "" + base.add(id)
+    } else {
+      return "" + id.subtract(base)
+    }
   }
 
   expressApp.get('/get_image_cache', (req,res) => {
@@ -51,8 +58,18 @@ exports.request = function (expressApp) {
     request(requestObj).pipe(res);
   })
 
-  expressApp.get('/get_player_avatar', (req, res) => {
-    console.log(req.query.steamids)
-    request(requestObj).pipe(res);
+  expressApp.get('/get_players_avatar', (req, res) => {
+    let steamids = [];
+    for(let i of req.query.steamids.split(",")){
+      steamids.push(steamIDConvertion(i));
+    }
+    let requestObj = assembleQueryObj('GET', STEAM_PLAYER_SUMMARIES_API_URL, {'steamids': steamids.join()})
+
+    request(requestObj, function(err, IMObj, resBody){
+      for (player of resBody.response.players) {
+        player.steamID32 = parseInt(steamIDConvertion(player.steamid, false));
+      }
+      res.json(resBody)
+    });
   })
 }

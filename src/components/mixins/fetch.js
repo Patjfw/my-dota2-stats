@@ -1,5 +1,7 @@
 import axios from 'axios'
 
+const ANONYMOUS = 4294967295
+
 export const fetch = {
   methods: {
     getImgCache () {
@@ -64,8 +66,8 @@ export const fetch = {
         return item.hero_id === heroID
       })
     },
-    getKDA (match) {
-      let myHeroID = this.getHeroID(match, this.account_id)
+    getKDA (match, accountID) {
+      let myHeroID = this.getHeroID(match, accountID)
       let myPerformance = this.getPerformance(match, myHeroID)
       let kda = ((myPerformance.kills + myPerformance.assists) / (myPerformance.deaths === 0 ? 1 : myPerformance.deaths)).toFixed(1)
       return {
@@ -74,6 +76,24 @@ export const fetch = {
         'deaths': myPerformance.deaths,
         'assists': myPerformance.assists
       }
+    },
+    getAllPlayersInfo (match) {
+      let players = []
+      for (let player of match.players) {
+        if (player.account_id !== ANONYMOUS) {
+          players.push(player.account_id)
+        }
+      }
+      let playersStr = players.join()
+      return new Promise(function (resolve, reject) {
+        axios.get('/get_players_avatar', {
+          params: {
+            steamids: playersStr
+          }
+        }).then((res) => {
+          resolve(res.data.response)
+        })
+      })
     }
   }
 }

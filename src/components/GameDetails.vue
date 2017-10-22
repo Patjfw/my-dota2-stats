@@ -17,8 +17,8 @@
           <td>{{getStat(this.matchDetails, 'first_blood_time')}}</td>
         </tr>
       </table>
-      <team-stats :matchDetails='matchDetails' :sides='0'></team-stats>
-      <team-stats :matchDetails='matchDetails' :sides='1'></team-stats>
+      <team-stats :matchDetails='matchDetails' :side=0 :playersInfo='playersInfo'></team-stats>
+      <team-stats :matchDetails='matchDetails' :side=1 :playersInfo='playersInfo'></team-stats>
     </div>
   </transition>
 </template>
@@ -37,6 +37,7 @@
         matchDetails: null,
         heroesImageCache: null,
         itemsImageCache: null,
+        playersInfo: [],
         match_id: this.$route.params.match_id
       }
     },
@@ -47,7 +48,7 @@
         this.matchDetails = this.$store.state.matches.find((match) => {
           return match.match_id === parseInt(this.match_id)
         }).details
-        this.loaded = true
+        this.getPlayersAvatar()
       } else {
         let resources = Promise.all([this.getImgCache(), this.getMatchDetails(this.match_id)])
         resources.then(val => {
@@ -55,11 +56,17 @@
           this.itemsImageCache = this.$store.state.itemsImageCache = val[0].itemsImageCache
 
           this.matchDetails = val[1]
-          this.loaded = true
+          this.getPlayersAvatar()
         })
       }
     },
     methods: {
+      getPlayersAvatar () {
+        this.getAllPlayersInfo(this.matchDetails).then(val => {
+          this.loaded = true
+          this.playersInfo.push(...val.players)
+        })
+      },
       getWin () {
         return this.matchDetails.radiant_win ? '天辉胜利' : '夜魇胜利'
       }

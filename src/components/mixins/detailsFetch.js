@@ -47,6 +47,16 @@ export const detailsFetch = {
         default:
           return stats[propertyName]
       }
+    },
+    getSideStat (matchDetails, side, statName) {
+      let count = 0
+      for (let player of matchDetails.players) {
+        if ((side === 0 && player.player_slot < 128) ||
+            (side === 1 && player.player_slot >= 128)) {
+          count += player[statName]
+        }
+      }
+      return count
     }
   }
 }

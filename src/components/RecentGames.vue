@@ -117,7 +117,7 @@ export default {
       }
     },
     getMyKDA (match) {
-      let kda = this.getKDA(match)
+      let kda = this.getKDA(match, this.account_id)
       return `${kda.kda} (${kda.kills} / ${kda.deaths} / ${kda.assists})`
     },
     showBriefing (index) {
