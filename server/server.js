@@ -2,7 +2,7 @@ var express = require('express')
 var path = require('path')
 var apiRequest = require('../server/apiRequest.js')
 
-var port = 3000
+var port = 8888
 var app = express()
 
 var server = app.listen(port)
