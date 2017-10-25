@@ -1,7 +1,7 @@
 # my-dota2-stats
 
 > my dota2 stats app
-visit http://173.255.255.110:8080/#/
+visit http://173.255.255.110:8888/#/
 
 ## Build Setup
 
