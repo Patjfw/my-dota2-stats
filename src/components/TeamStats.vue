@@ -249,6 +249,7 @@ export default {
     .avatar_name
       width: 60px
       overflow: hidden
+      white-space: nowrap
       text-overflow: ellipsis
 
     .kda
@@ -266,7 +267,7 @@ export default {
       flex-direction: column
       justify-content: flex-end
 
-    .engage-percent
+    .engage-percent::before
       content: "参战率"
 
     .engage-damage::before

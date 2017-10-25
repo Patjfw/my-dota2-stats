@@ -1,5 +1,5 @@
 <template lang="html">
-  <transition tag="div">
+  <transition name="fade" tag="div">
     <div v-if="loaded" id="details_container">
       <div id="match_title">
         <span>比赛</span><span>{{$route.params.match_id}}</span>
@@ -104,4 +104,11 @@
     #time_stats
       width: 100%
       text-align: center
+
+  .fade-enter-active, .fade-leave-active
+    transition: all 0.4s
+
+  .fade-enter, .fade-leave-to
+    transform: translateY(30px)
+    opacity: 0
 </style>
