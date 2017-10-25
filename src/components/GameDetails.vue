@@ -78,13 +78,30 @@
 </script>
 
 <style lang="sass" scoped>
-  @media (min-width: 800px)
+  @media (min-width: 600px)
     #details_container
       width: 800px
       margin: 0 auto
 
-  @media (max-width: 360px)
-    #details_container
-      width: 360px
+    #match_title
+      font-size: 20px
 
+    #time_stats
+      background: #181818
+      color: #999
+      text-align: center
+
+      th
+        width: 100px
+
+  @media (max-width: 599px)
+    #details_container
+      width: 100%
+
+    #match_title
+      text-align: center
+
+    #time_stats
+      width: 100%
+      text-align: center
 </style>

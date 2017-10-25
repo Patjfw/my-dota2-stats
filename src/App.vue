@@ -35,7 +35,7 @@
       text-decoration: none
 
   #app
-    font-family: 'Avenir', Helvetica, Arial, sans-serif
+    font-family: Helvetica, Arial, sans-serif
 
   #declartion
     width: 320px

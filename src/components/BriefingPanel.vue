@@ -99,7 +99,6 @@
     display: flex
     wrap: wrap
 
-
   .details_link
     float: right
 
